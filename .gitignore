@@ -1,0 +1,28 @@
+# TLS material
+*.pem
+*.key
+
+# Local config
+.env
+.env.local
+
+# Captures / RE artifacts
+captured/
+*.pcap
+*.pcapng
+*.bin
+*.nso
+*.nsp
+
+# Build output
+/server
+/mhgu-server
+/bin/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
