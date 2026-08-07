@@ -288,6 +288,7 @@ func main() {
 		logger.Error("config error", slog.Any("err", err))
 		os.Exit(2)
 	}
+	loadGatesConfig() // uses logger.Warn; must run after setupLogger()
 
 	settings := nex.NewSwitchSettings(accessKey, nexVersion)
 	if accessKey == "TODO_MHGU_ACCESS_KEY" || nexVersion == 0 {

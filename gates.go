@@ -187,18 +187,14 @@ func resolveNSAtoPID(nsa string) (uint64, nsaStatus) {
 }
 
 // loadGatesConfig fills accountBaseURL / internalKey from env. Called
-// from loadConfig() in main.go -- separated so the gates package is
-// the single owner of its env-var contract.
+// from main() AFTER setupLogger() so the package-level logger exists
+// for any warning we want to emit. (A previous version used a Go init()
+// function, but init() runs before main() and so before setupLogger();
+// that path panicked with nil-pointer dereference.)
 func loadGatesConfig() {
 	accountBaseURL = envOr(envAccountURL, "")
 	internalKey = envOr(envInternalKey, "")
 	if accountBaseURL == "" {
 		logger.Warn("NEXTENDO_ACCOUNT_URL unset -- gates are no-ops")
 	}
-}
-
-// init runs at package init. Loads env vars once so gates are ready
-// before the first RMC fires.
-func init() {
-	loadGatesConfig()
 }
