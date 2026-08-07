@@ -51,7 +51,7 @@ func datastoreStubHandler() nex.RMCHandler {
 		s := conn.Settings
 		logger.Debug("datastore stub",
 			slog.Uint64("pid", conn.PID),
-			slog.Uint32("method", req.Method),
+			slog.Uint64("method", uint64(req.Method)),
 			slog.Int("bodyLen", len(req.Body)))
 		return nex.NewRMCSuccess(s, 0x73, req.Method, req.CallID, nil)
 	}

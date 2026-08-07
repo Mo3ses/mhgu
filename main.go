@@ -359,12 +359,12 @@ func main() {
 		logger.Info("connect",
 			slog.String("addr", c.RemoteAddr),
 			slog.Uint64("pid", c.PID),
-			slog.Uint32("cid", c.ID))
+			slog.Uint64("cid", uint64(c.ID)))
 	}
 	secureEndpoint.OnDisconnect = func(c *nex.Connection) {
 		logger.Info("disconnect",
 			slog.Uint64("pid", c.PID),
-			slog.Uint32("cid", c.ID))
+			slog.Uint64("cid", uint64(c.ID)))
 		mm.RemovePlayer(c.PID)
 	}
 
@@ -441,8 +441,8 @@ func logRMC(tag string) func(*nex.Connection, *nex.RMCMessage) {
 			slog.String("tag", tag),
 			slog.Uint64("pid", c.PID),
 			slog.String("proto", fmt.Sprintf("0x%x", req.Protocol)),
-			slog.Uint32("method", req.Method),
-			slog.Uint32("callID", req.CallID),
+			slog.Uint64("method", uint64(req.Method)),
+			slog.Uint64("callID", uint64(req.CallID)),
 			slog.Int("bodyLen", len(req.Body)))
 	}
 }

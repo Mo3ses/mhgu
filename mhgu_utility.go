@@ -41,7 +41,6 @@ func setupMHGUUtility(ep *nex.Endpoint) {
 
 	ep.Register(nex.ProtocolUtility,
 		func(conn *nex.Connection, req *nex.RMCMessage) *nex.RMCMessage {
-			s := conn.Settings
 			switch req.Method {
 			// Future MHGU overrides go here. Until then, the default
 			// branch reaches the core handler, which routes every
