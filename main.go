@@ -39,8 +39,10 @@ const (
 
 	// accessKey is the per-title 8-hex string NEX uses to sign the
 	// PRUDP handshake. Splatoon 2 uses "4eb18d39", MK8D "09c1c475",
-	// SSBU "9587602b". MHGU's value is unknown until RE.
-	accessKey = "TODO_MHGU_ACCESS_KEY"
+	// SSBU "9587602b". MHGU's value recovered 2026-08-07 from Ryujinx
+	// core.74506 via mhgu-tester HMAC-MD5 brute force against the
+	// captured signature 38405df0fc16a700f900f679a32512d5.
+	accessKey = "4152f312"
 
 	// nexVersion is the NEX protocol version (e.g. 40000 = NEX 4.0.0).
 	// MK8D uses 40000; MHGU's value is unknown until RE.
@@ -195,6 +197,15 @@ func setupLogger() {
 // derived from nextendoSecret so the ticket round-trips.
 func resolveUser(username string, extraData []byte) (uint64, []byte, bool) {
 	secret := loadNextendoSecret()
+	// When NEXTENDO_ACCOUNT_URL is unset the secret is nil. Anonymous logins
+	// (path 3) would feed nil into ClientTicket.Encrypt and panic the
+	// server. Fall back to a per-username derived key so anonymous sessions
+	// still produce a ticket the client can decrypt. NOT secure — only
+	// acceptable while NEXTENDO_REQUIRE_ACCOUNT=0 (dev/local mode).
+	if len(secret) == 0 {
+		h := sha256.Sum256([]byte("mhgu-anon:" + username))
+		secret = h[:16]
+	}
 
 	// Path 1: signed token.
 	if strings.HasPrefix(username, "nx2.") {

@@ -14,10 +14,19 @@ captured/
 *.nso
 *.nsp
 
+# Secrets — never commit (certs, title keys, prod.keys, etc.)
+*.keys
+title.keys
+prod.keys
+dev.keys
+
 # Build output
 /server
 /mhgu-server
 /bin/
+
+# Debug tooling binary (source in capture/main.go)
+/capture/baas-capture
 
 # IDE
 .vscode/
